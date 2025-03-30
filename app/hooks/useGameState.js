@@ -5,6 +5,8 @@ import {
   getCustomBackImage,
   DEFAULT_CARD_IMAGES,
   DEFAULT_BACK_IMAGE,
+  MARIO_BACK_IMAGE,
+  MARIO_CARD_IMAGES,
 } from "../../utils/storage";
 import {
   generateDeck,
@@ -13,8 +15,9 @@ import {
   shuffleCards,
 } from "../../utils/gameLogic";
 
-const useGameState = (difficulty = "medium") => {
+const useGameState = (difficulty = "medium", theme = "default") => {
   const [cards, setCards] = useState([]);
+  const [currentTheme, setCurrentTheme] = useState(theme);
   const [flippedCards, setFlippedCards] = useState([]);
   const [matchedPairs, setMatchedPairs] = useState(0);
   const [moves, setMoves] = useState(0);
@@ -24,6 +27,25 @@ const useGameState = (difficulty = "medium") => {
   const [cardImages, setCardImages] = useState(DEFAULT_CARD_IMAGES);
   const [backImage, setBackImage] = useState(DEFAULT_BACK_IMAGE);
 
+  const getThemeAssets = (themeName) => {
+    switch (themeName) {
+      case "mario":
+        return {
+          cardImages: MARIO_CARD_IMAGES,
+          backImage: MARIO_BACK_IMAGE,
+        };
+      case "default":
+        return {
+          cardImages: DEFAULT_CARD_IMAGES,
+          backImage: DEFAULT_BACK_IMAGE,
+        };
+      default:
+        return {
+          cardImages: DEFAULT_CARD_IMAGES,
+          backImage: DEFAULT_BACK_IMAGE,
+        };
+    }
+  };
   // animation references
   const flipAnimations = useRef({});
 
@@ -44,18 +66,15 @@ const useGameState = (difficulty = "medium") => {
     setLoading(true);
 
     try {
-      console.log("Default card images count:", DEFAULT_CARD_IMAGES.length);
+      const themeAssets = getThemeAssets(currentTheme);
 
       const customImages = await getCustomCardImages();
       const customBackImg = await getCustomBackImage();
 
       console.log("Custom images loaded:", customImages ? "yes" : "no");
 
-      const images = customImages || DEFAULT_CARD_IMAGES;
-      const backImg = customBackImg || DEFAULT_BACK_IMAGE;
-
-      console.log("Using back image:", backImg);
-      console.log("Number of card images:", images.length);
+      const images = customImages || themeAssets.cardImages;
+      const backImg = customBackImg || themeAssets.backImage;
 
       setCardImages(images);
       setBackImage(backImg);
@@ -75,6 +94,14 @@ const useGameState = (difficulty = "medium") => {
       setLoading(false);
     }
   };
+
+  const changeTheme = (newTheme) => {
+    setCurrentTheme(newTheme);
+  };
+
+  //   useEffect(() => {
+  //     initializeGame();
+  //   }, [difficulty, currentTheme]);
 
   const flipCard = (cardId) => {
     if (flippedCards.length === 2) return;
@@ -176,7 +203,7 @@ const useGameState = (difficulty = "medium") => {
   useEffect(() => {
     console.log(`Initializing game with difficulty: ${difficulty}`);
     initializeGame();
-  }, [difficulty]);
+  }, [difficulty, currentTheme]);
 
   const shuffleDeck = () => {
     console.log("Shuffling deck");
@@ -215,6 +242,8 @@ const useGameState = (difficulty = "medium") => {
     initializeGame,
     flipCard,
     shuffleDeck,
+    currentTheme,
+    changeTheme,
   };
 };
 

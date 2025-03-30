@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  StyleShee,
+  StyleSheet,
   TouchableOpacity,
   Image,
   Animated,
@@ -28,7 +28,6 @@ const Card = ({
     inputRange: [0, 180],
     outputRange: ["180deg", "360deg"],
   });
-
   const frontAnimatedStyle = {
     transform: [{ rotateY: frontInterpolate }],
   };
@@ -40,7 +39,7 @@ const Card = ({
 
   return (
     <TouchableOpacity
-      styles={styles.container}
+      style={styles.container}
       onPress={() => onPress(id)}
       disabled={isFlipped || isMatched}
     >
@@ -50,6 +49,7 @@ const Card = ({
         <Image source={backImage} style={styles.cardImage} resizeMode="cover" />
       </Animated.View>
 
+      {/* Back of card (actual image) */}
       <Animated.View
         style={[
           cardStyle,

@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   View,
   StyleSheet,
@@ -9,7 +10,6 @@ import {
 import Card from "./Card";
 
 const { width } = Dimensions.get("window");
-
 const Board = ({
   cards,
   backImage,
@@ -19,16 +19,23 @@ const Board = ({
   moves,
   matchedPairs,
 }) => {
+  useEffect(() => {
+    console.log("Board rendering with cards:", cards.length);
+    console.log("First card data:", cards[0]);
+    console.log("Back image:", backImage);
+  }, [cards, backImage]);
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#0000ff" />
-        <Text style={styles.loadingText}>Loading...</Text>
+        <Text style={styles.loadingText}>Loading game...</Text>
       </View>
     );
   }
 
   const handleCardPress = (cardId) => {
+    console.log("Flipping card:", cardId);
     onCardPress(cardId);
   };
 
@@ -36,18 +43,23 @@ const Board = ({
     <View style={styles.container}>
       <View style={styles.statsContainer}>
         <Text style={styles.statsText}>Moves: {moves}</Text>
-        <Text style={styles.statsText}>Matched pairs: {matchedPairs}</Text>
+        <Text style={styles.statsText}>Matches: {matchedPairs}</Text>
       </View>
 
       <View style={[styles.board, { width: width * 0.9 }]}>
         {cards.map((card) => {
+          // Debug: Log each card's image props
+          console.log(
+            `Card ${card.id} - image: ${card.image ? "exists" : "missing"}`
+          );
+
           return (
             <Card
               key={card.id}
               id={card.id}
               image={card.image}
               backImage={backImage}
-              isFlipped={flipAnimations[card.id]}
+              isFlipped={card.isFlipped}
               isMatched={card.isMatched}
               onPress={handleCardPress}
               animationValue={flipAnimations[card.id] || new Animated.Value(0)}

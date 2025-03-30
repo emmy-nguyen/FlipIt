@@ -26,14 +26,14 @@ export const generateDeck = (cardImages, difficulty = "medium") => {
 
     cards.push(
       {
-        id: `card-${i}-a`,
+        id: `card_${i}_a`,
         image: image,
         value: i,
         isFlipped: false,
         isMatched: false,
       },
       {
-        id: `card-${i}-b`,
+        id: `card_${i}_b`,
         image: image,
         value: i,
         isFlipped: false,
@@ -44,7 +44,7 @@ export const generateDeck = (cardImages, difficulty = "medium") => {
   return shuffleCards(cards);
 };
 
-export const checkforMatch = (flippedCards) => {
+export const checkForMatch = (flippedCards) => {
   if (flippedCards.length !== 2) return false;
   return flippedCards[0].value === flippedCards[1].value;
 };

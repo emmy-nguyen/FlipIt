@@ -52,8 +52,6 @@ const useGameState = (difficulty = "medium", theme = "default") => {
   // process the deck to ensure images are correctly formatted
   const processCards = (deck) => {
     return deck.map((card) => {
-      console.log(`Processing card ${card.id}, image:`, card.image);
-
       if (!flipAnimations.current[card.id]) {
         flipAnimations.current[card.id] = new Animated.Value(0);
       }
@@ -70,8 +68,6 @@ const useGameState = (difficulty = "medium", theme = "default") => {
 
       const customImages = await getCustomCardImages();
       const customBackImg = await getCustomBackImage();
-
-      console.log("Custom images loaded:", customImages ? "yes" : "no");
 
       const images = customImages || themeAssets.cardImages;
       const backImg = customBackImg || themeAssets.backImage;
@@ -98,10 +94,6 @@ const useGameState = (difficulty = "medium", theme = "default") => {
   const changeTheme = (newTheme) => {
     setCurrentTheme(newTheme);
   };
-
-  //   useEffect(() => {
-  //     initializeGame();
-  //   }, [difficulty, currentTheme]);
 
   const flipCard = (cardId) => {
     if (flippedCards.length === 2) return;

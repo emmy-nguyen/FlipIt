@@ -7,12 +7,15 @@ import {
   SafeAreaView,
   Alert,
   Animated,
+  Modal,
+  TouchableWithoutFeedback,
 } from "react-native";
 import Board from "../app/components/Board";
 import useGameState from "../app/hooks/useGameState";
 
 const GameScreen = () => {
   const [difficulty, setDifficulty] = useState("medium");
+  const [showThemeSelector, setShowThemeSelector] = useState(false);
 
   const {
     cards,
@@ -26,10 +29,15 @@ const GameScreen = () => {
     initializeGame,
     flipCard,
     shuffleDeck,
-  } = useGameState(difficulty);
+    currentTheme,
+    changeTheme,
+  } = useGameState(difficulty, "default");
 
+  const handleThemeChange = (newTheme) => {
+    changeTheme(newTheme);
+    setShowThemeSelector(false);
+  };
   const changeDifficulty = (newDifficulty) => {
-    console.log(`Changing difficulty to ${newDifficulty}`);
     setDifficulty(newDifficulty);
   };
 
@@ -44,12 +52,8 @@ const GameScreen = () => {
     }
   }, [gameCompleted, moves, shuffleDeck]);
 
-  // Debug: Log card status
   React.useEffect(() => {
     if (cards.length > 0) {
-      console.log("Cards loaded:", cards.length);
-      console.log("Sample card image type:", typeof cards[0].image);
-
       // Import check - log what the card.image actually is
       if (cards[0].image) {
         const imageInfo = cards[0].image;
@@ -58,21 +62,52 @@ const GameScreen = () => {
     }
   }, [cards]);
 
+  const themes = ["default", "mario"];
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Memory Game</Text>
         <View style={styles.headerButtons}>
           <TouchableOpacity style={styles.button} onPress={shuffleDeck}>
             <Text style={styles.buttonText}>Shuffle</Text>
           </TouchableOpacity>
+          <View style={styles.themeDropdownContainer}>
+            <TouchableOpacity
+              style={styles.themeButton}
+              onPress={() => setShowThemeSelector(!showThemeSelector)}
+            >
+              <Text style={styles.buttonText}>Change Theme</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity style={styles.button} onPress={() => {}}>
-            <Text style={styles.buttonText}>Setting</Text>
-          </TouchableOpacity>
+            {showThemeSelector && (
+              <View style={styles.themeDropdown}>
+                {themes.map((theme) => (
+                  <TouchableOpacity
+                    key={theme}
+                    style={[
+                      styles.themeOption,
+                      currentTheme === theme && styles.activeThemeOption,
+                    ]}
+                    onPress={() => handleThemeChange(theme)}
+                  >
+                    <Text
+                      style={[
+                        styles.themeOptionText,
+                        currentTheme === theme && styles.activeThemeOptionText,
+                      ]}
+                    >
+                      {theme.charAt(0).toUpperCase() + theme.slice(1)}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+                {/* <ThemeSelector
+                  currentTheme={currentTheme}
+                  onThemeSelect={handleThemeChange}
+                /> */}
+              </View>
+            )}
+          </View>
         </View>
       </View>
-
       <View style={styles.difficultyContainer}>
         <TouchableOpacity
           style={[
@@ -81,7 +116,14 @@ const GameScreen = () => {
           ]}
           onPress={() => changeDifficulty("easy")}
         >
-          <Text style={styles.difficultyText}>Easy</Text>
+          <Text
+            style={[
+              styles.difficultyText,
+              difficulty === "easy" && styles.activeButtonText,
+            ]}
+          >
+            Easy
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -91,7 +133,14 @@ const GameScreen = () => {
           ]}
           onPress={() => changeDifficulty("medium")}
         >
-          <Text style={styles.difficultyText}>Medium</Text>
+          <Text
+            style={[
+              styles.difficultyText,
+              difficulty === "medium" && styles.activeButtonText,
+            ]}
+          >
+            Medium
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -101,9 +150,22 @@ const GameScreen = () => {
           ]}
           onPress={() => changeDifficulty("hard")}
         >
-          <Text style={styles.difficultyText}>Hard</Text>
+          <Text
+            style={[
+              styles.difficultyText,
+              difficulty === "hard" && styles.activeButtonText,
+            ]}
+          >
+            Hard
+          </Text>
         </TouchableOpacity>
       </View>
+
+      {showThemeSelector && (
+        <TouchableWithoutFeedback onPress={() => setShowThemeSelector(false)}>
+          <View style={styles.touchableOverlay} />
+        </TouchableWithoutFeedback>
+      )}
 
       <Board
         cards={cards}
@@ -113,6 +175,9 @@ const GameScreen = () => {
         loading={loading}
         moves={moves}
         matchedPairs={matchedPairs}
+        currentTheme={currentTheme}
+        difficulty={difficulty}
+        gameCompleted={gameCompleted}
       />
     </SafeAreaView>
   );
@@ -124,46 +189,91 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
   },
   header: {
-    backgroundColor: "#4682B4",
     padding: 16,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     alignItems: "center",
+    zIndex: 9,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "white",
+    color: "#34495e",
   },
   headerButtons: {
     flexDirection: "row",
+    zIndex: 9,
   },
   button: {
     marginLeft: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
   },
   buttonText: {
-    color: "white",
+    color: "#34495e",
     fontSize: 16,
   },
   difficultyContainer: {
     flexDirection: "row",
     justifyContent: "center",
     paddingVertical: 10,
-    backgroundColor: "#e0e0e0",
   },
   difficultyButton: {
     paddingHorizontal: 20,
     paddingVertical: 10,
     marginHorizontal: 5,
     borderRadius: 20,
-    backgroundColor: "#d0d0d0",
+    backgroundColor: "#ffff",
   },
   activeButton: {
-    backgroundColor: "#4682B4",
+    backgroundColor: "#000000",
+  },
+  activeButtonText: {
+    color: "#ffffff",
   },
   difficultyText: {
     fontWeight: "bold",
     color: "#333",
+  },
+  themeDropdownContainer: {
+    position: "relative",
+    zIndex: 10,
+  },
+  themeDropdown: {
+    position: "absolute",
+    top: "100%",
+    right: 0,
+    width: 150,
+    backgroundColor: "white",
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 8,
+    zIndex: 11,
+  },
+  themeOption: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+  },
+  themeButton: {
+    marginLeft: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+  },
+  activeThemeOption: {
+    backgroundColor: "#f0f0f0",
+  },
+  themeOptionText: {
+    fontSize: 14,
+    color: "#333",
+  },
+  activeThemeOptionText: {
+    fontWeight: "bold",
   },
 });
 

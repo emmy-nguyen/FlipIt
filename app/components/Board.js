@@ -6,6 +6,7 @@ import {
   Dimensions,
   ActivityIndicator,
   Text,
+  Animated,
 } from "react-native";
 import Card from "./Card";
 
@@ -18,12 +19,53 @@ const Board = ({
   loading,
   moves,
   matchedPairs,
+  currentTheme,
+  difficulty,
 }) => {
-  useEffect(() => {
-    console.log("Board rendering with cards:", cards.length);
-    console.log("First card data:", cards[0]);
-    console.log("Back image:", backImage);
-  }, [cards, backImage]);
+  // const [seconds, setSeconds] = useState(0);
+  // const timerRef = useRef(null);
+
+  // const prevThemeRef = useRef(currentTheme);
+  // const prevDifficultyRef = useRef(difficulty);
+
+  // useEffect(() => {
+  //   const themeChanged = prevThemeRef.current !== currentTheme;
+  //   const difficultyChanged = prevDifficultyRef.current !== difficulty;
+
+  //   prevThemeRef.current = currentTheme;
+  //   prevDifficultyRef.current = difficulty;
+
+  //   if (themeChanged || difficultyChanged) {
+  //     setSeconds(0);
+  //   }
+
+  //   if (timerRef.current) {
+  //     clearInterval(timerRef.current);
+  //   }
+  //   timerRef.current = setInterval(() => {
+  //     setSeconds((prevSeconds) => prevSeconds + 1);
+  //   }, 1000);
+
+  //   return () => {
+  //     if (timerRef.current) {
+  //       clearInterval(timerRef.current);
+  //     }
+  //   };
+  // }, [currentTheme, difficulty]);
+
+  // const formatTime = (totalSeconds) => {
+  //   const minutes = Math.floor(totalSeconds / 60);
+  //   const seconds = totalSeconds % 60;
+  //   return `${minutes.toString().padStart(2, "0")}:${seconds
+  //     .toString()
+  //     .padStart(2, "0")}`;
+  // };
+
+  // useEffect(() => {
+  //   console.log("Board rendering with cards:", cards.length);
+  //   console.log("First card data:", cards[0]);
+  //   console.log("Back image:", backImage);
+  // }, [cards, backImage]);
 
   if (loading) {
     return (
@@ -43,6 +85,7 @@ const Board = ({
     <View style={styles.container}>
       <View style={styles.statsContainer}>
         <Text style={styles.statsText}>Moves: {moves}</Text>
+        {/* <Text style={styles.statsText}>Time: {formatTime(seconds)}</Text> */}
         <Text style={styles.statsText}>Matches: {matchedPairs}</Text>
       </View>
 

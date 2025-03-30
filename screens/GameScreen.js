@@ -12,10 +12,12 @@ import {
 } from "react-native";
 import Board from "../app/components/Board";
 import useGameState from "../app/hooks/useGameState";
+import CongratulationsModal from "../app/components/CongratulationsModal";
 
 const GameScreen = () => {
   const [difficulty, setDifficulty] = useState("medium");
   const [showThemeSelector, setShowThemeSelector] = useState(false);
+  const [showCongratulations, setShowCongratulations] = useState(false);
 
   const {
     cards,
@@ -41,16 +43,16 @@ const GameScreen = () => {
     setDifficulty(newDifficulty);
   };
 
-  // Handle game completion
   React.useEffect(() => {
     if (gameCompleted) {
-      Alert.alert(
-        "Congratulations!",
-        `You completed the game in ${moves} moves!`,
-        [{ text: "Play Again", onPress: shuffleDeck }]
-      );
+      setShowCongratulations(true);
     }
-  }, [gameCompleted, moves, shuffleDeck]);
+  }, [gameCompleted]);
+
+  const handlePlayAgain = () => {
+    setShowCongratulations(false);
+    shuffleDeck();
+  };
 
   React.useEffect(() => {
     if (cards.length > 0) {
@@ -99,10 +101,6 @@ const GameScreen = () => {
                     </Text>
                   </TouchableOpacity>
                 ))}
-                {/* <ThemeSelector
-                  currentTheme={currentTheme}
-                  onThemeSelect={handleThemeChange}
-                /> */}
               </View>
             )}
           </View>
@@ -178,6 +176,12 @@ const GameScreen = () => {
         currentTheme={currentTheme}
         difficulty={difficulty}
         gameCompleted={gameCompleted}
+      />
+
+      <CongratulationsModal
+        visible={showCongratulations}
+        moves={moves}
+        onClose={handlePlayAgain}
       />
     </SafeAreaView>
   );

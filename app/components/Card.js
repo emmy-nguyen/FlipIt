@@ -5,6 +5,7 @@ import {
   Image,
   Animated,
   View,
+  Platform,
 } from "react-native";
 import { Dimensions } from "react-native";
 
@@ -67,9 +68,10 @@ const Card = ({
 const styles = StyleSheet.create({
   container: {
     margin: 5,
-    width: cardSize,
-    height: cardSize * 1.5,
+    width: Platform.OS === "web" ? "150px" : cardSize,
+    height: Platform.OS === "web" ? "200px" : cardSize * 1.5,
     borderRadius: 10,
+    position: "relative",
   },
   card: {
     height: "100%",

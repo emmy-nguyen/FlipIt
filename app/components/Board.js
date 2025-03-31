@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Text,
   Animated,
+  Platform,
 } from "react-native";
 import Card from "./Card";
 
@@ -118,7 +119,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
     padding: 10,
   },
   loadingContainer: {

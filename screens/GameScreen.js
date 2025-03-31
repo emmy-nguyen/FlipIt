@@ -9,6 +9,7 @@ import {
   Animated,
   Modal,
   TouchableWithoutFeedback,
+  Platform,
 } from "react-native";
 import Board from "../app/components/Board";
 import useGameState from "../app/hooks/useGameState";
@@ -190,6 +191,7 @@ const GameScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: "column",
     backgroundColor: "#f5f5f5",
   },
   header: {

@@ -20,6 +20,8 @@ export const MARIO_CARD_IMAGES = [
   require("../assets/images/mario-theme/card 4.png"),
   require("../assets/images/mario-theme/card 5.png"),
   require("../assets/images/mario-theme/card 6.png"),
+  require("../assets/images/mario-theme/card 8.png"),
+  require("../assets/images/mario-theme/card 9.png"),
 ];
 
 const CUSTOM_CARD_IMAGES_KEY = "flipit_custom_cards";

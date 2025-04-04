@@ -12,16 +12,16 @@ export const DEFAULT_CARD_IMAGES = [
   require("../assets/images/8.jpeg"),
 ];
 
-export const MARIO_BACK_IMAGE = require("../assets/images/mario-theme/card 7.png");
+export const MARIO_BACK_IMAGE = require("../assets/images/mario-theme/card.png");
 export const MARIO_CARD_IMAGES = [
-  require("../assets/images/mario-theme/card 1.png"),
-  require("../assets/images/mario-theme/card 2.png"),
-  require("../assets/images/mario-theme/card 3.png"),
-  require("../assets/images/mario-theme/card 4.png"),
-  require("../assets/images/mario-theme/card 5.png"),
-  require("../assets/images/mario-theme/card 6.png"),
-  require("../assets/images/mario-theme/card 8.png"),
-  require("../assets/images/mario-theme/card 9.png"),
+  require("../assets/images/mario-theme/card1.png"),
+  require("../assets/images/mario-theme/card2.png"),
+  require("../assets/images/mario-theme/card3.png"),
+  require("../assets/images/mario-theme/card4.png"),
+  require("../assets/images/mario-theme/card5.png"),
+  require("../assets/images/mario-theme/card6.png"),
+  require("../assets/images/mario-theme/card7.png"),
+  require("../assets/images/mario-theme/card8.png"),
 ];
 
 const CUSTOM_CARD_IMAGES_KEY = "flipit_custom_cards";
